@@ -77,7 +77,7 @@ class Player:
         # we are given a reference to the window,
         # with which we can blit (display an image) on
         # specifying a position
-        win.blit(self.sprite[self.orientation], self.pos)
+        win.blit(self.sprites[self.orientation], self.pos)
     
     def update(self):
         # update animations and all that stuff (or not)

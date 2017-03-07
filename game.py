@@ -1,5 +1,7 @@
 # pygame constants, such as the events' code
 from pygame.locals import *
+# drawing lib
+import pygame
 # game constants
 from constants import *
 # we import the button class
@@ -17,8 +19,7 @@ class Game:
         self.player = Player()
         self.level = Level()
         
-        # test
-        self.btn = Button(10, 10, 20, 15, "hello world", pygame.SysFont("arial", 18))
+        ## self.btn = Button(10, 10, 20, 15, "hello world", pygame.font.SysFont("arial", 18))
 
     def load(self):
         self.running = True
@@ -36,12 +37,14 @@ class Game:
 
     def render(self):
         # game rendering method
+        # clear the screen before blitting anything to items
+        pygame.draw.rect(self.win, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
         # first render map
         self.level.render(self.win)
         # then player otherwise the player will be behind the map
         self.player.render(self.win)
         
-        self.btn.render(self.win)
+        ##self.btn.render(self.win)
 
     def run(self):
         # main game loop

@@ -72,12 +72,10 @@ class Level:
             y += 1
 
 
+# just to test if everything is correct ; kind of quick n' dirty
 if __name__ == '__main__':
-    pygame.init()
-    w = pygame.display.set_mode((WIDTH, HEIGHT))
-    le = Level()
-    le.load()
-    while pygame.event.poll().type != pygame.QUIT:
-        le.render(w)
-        pygame.display.flip()
-    pygame.quit()
+    import pygame as p ; p.init()
+    w, le = p.display.set_mode((WIDTH, HEIGHT)), Level() ; le.load()
+    while p.event.poll().type != p.QUIT:
+        le.render(w) ; p.display.flip()
+    p.quit()
