@@ -52,3 +52,7 @@ class Player:
         # with which we can blit (display an image) on
         # specifying a position
         win.blit(self.sprite[self.orientation], self.pos)
+    
+    def update(self):
+        # update animations and all that stuff (or not)
+        pass
