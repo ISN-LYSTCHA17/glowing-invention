@@ -3,11 +3,14 @@
 
 
 def caesar_crypt(code, key):
+    key = key.lower()  # we turn the wholme key into lowercase, same with the code
+    code = code.lower()
+    
     crypted = []
     
     # we create a list containing the abc,
     # one element => one letter
-    alphabet = list("abcdefghijklmnopqrstuvwxyz")
+    alphabet = list("abcdefghijklmnopqrstuvwxyz ")
     
     # create the new abc regarding to the given key
     # example :
@@ -37,17 +40,19 @@ def caesar_decrypt(code, key):
 
 def vigenere_crypt(code, key):
     crypted = []
+    key = key.lower()  # we turn the wholme key into lowercase, same with the code
+    code = code.lower()
     
     # we create a list containing the abc,
     # one element => one letter
-    alphabet = list("abcdefghijklmnopqrstuvwxyz")
+    alphabet = list("abcdefghijklmnopqrstuvwxyz ")
     
     # we create the crypted abc as a list
     crypted_abc = []
     # we must reformat the key to eliminate the duplicated characters
     reformatted_key = []
-    for c in reformatted_key:
-        # for each character in the reformatted_key
+    for c in key:
+        # for each character in the key :D
         if c not in reformatted_key:
             # if the character is not in the reformatted_key list
             # we add it to the list
@@ -80,3 +85,15 @@ def polybe_crypt(code):
 
 def polybe_decrypt(code):
     pass
+
+
+# if we start the script directly, not when we import it
+if __name__ == '__main__':
+    # tests
+    msg = "ceci est un test"
+    
+    print("Caesar", caesar_crypt(msg, "e"), sep="\n")
+    print("Vigenere", vigenere_crypt(msg, "vigenere"), sep="\n")
+
+
+

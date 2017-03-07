@@ -2,12 +2,17 @@
 from pygame.locals import *
 # game constants
 from constants import *
+# we import the button class
+from button import Button
 
 
 class Game:
     def __init__(self, win):
         self.running = False
         self.win = win
+        
+        # test
+        self.btn = Button(10, 10, 20, 15, "hello world", pygame.SysFont("arial", 18))
 
     def load(self):
         self.running = True
@@ -21,7 +26,7 @@ class Game:
 
     def render(self):
         # game rendering method
-        pass
+        self.btn.render(self.win)
 
     def run(self):
         # main game loop
@@ -31,6 +36,10 @@ class Game:
                 # handle quit event
                 if ev.type == QUIT:
                     self.running = False
+                # handle clic
+                if ev.type == MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.pos()
+                    print(self.btn(x, y))
 
             # update game values
             self.update()
