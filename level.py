@@ -29,7 +29,9 @@ class Level:
                 yn = []
                 # for each character in the line
                 for c in a_line:
-                    yn.append(int(c))
+                    # we check if the read character is a number
+                    if c.isdigit():
+                        yn.append(int(c))
                 # we append the converted line to the level
                 self.data.append(yn)
     
@@ -39,7 +41,8 @@ class Level:
         # for each file listed in the list returned by the glob function
         # of the glob module. the glob function is applied to the directory
         # where the tiles are located to list all its blocs (aka tiles)
-        for file in glob.glob("gfx/tiles/*.png"):
+        #   here we use sorted(..) on glob.glob(..) to re-order all the files in alphabetical order
+        for file in sorted(glob.glob("gfx/tiles/*.png")):
             # load an image using pygame image module
             img = pygame.image.load(file)
             img.convert_alpha()
@@ -66,4 +69,15 @@ class Level:
                 # print the tile to the screen
                 win.blit(self.tiles[bloc_id], [x * TILESIZE, y * TILESIZE])
                 x += 1
-y += 1
+            y += 1
+
+
+if __name__ == '__main__':
+    pygame.init()
+    w = pygame.display.set_mode((WIDTH, HEIGHT))
+    le = Level()
+    le.load()
+    while pygame.event.poll().type != pygame.QUIT:
+        le.render(w)
+        pygame.display.flip()
+    pygame.quit()
