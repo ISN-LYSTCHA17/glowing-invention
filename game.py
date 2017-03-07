@@ -4,12 +4,18 @@ from pygame.locals import *
 from constants import *
 # we import the button class
 from button import Button
+# player
+from player import Player
+# level
+from level import Level
 
 
 class Game:
     def __init__(self, win):
         self.running = False
         self.win = win
+        self.player = Player()
+        self.level = Level()
         
         # test
         self.btn = Button(10, 10, 20, 15, "hello world", pygame.SysFont("arial", 18))
@@ -19,13 +25,22 @@ class Game:
         # set the key repeat after 200ms of continuing keyboard input
         # repeated each 100ms
         pygame.key.set_repeat(200, 100)
+        # load the player
+        self.player.load()
+        # load the level
+        self.level.load()
 
     def update(self):
         # game updating method
-        pass
+        self.player.update()
 
     def render(self):
         # game rendering method
+        # first render map
+        self.level.render(self.win)
+        # then player otherwise the player will be behind the map
+        self.player.render(self.win)
+        
         self.btn.render(self.win)
 
     def run(self):
@@ -37,9 +52,20 @@ class Game:
                 if ev.type == QUIT:
                     self.running = False
                 # handle clic
-                if ev.type == MOUSEBUTTONDOWN:
+                elif ev.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.pos()
                     print(self.btn(x, y))
+                # handling events : checking if we need to move the player
+                #  WASD = ZQSD for pygame
+                elif ev.type == KEYDOWN:
+                    if ev.key == K_w:
+                        self.player.move(UP, self.level)
+                    elif ev.key == K_s:
+                        self.player.move(DOWN, self.level)
+                    elif ev.key == K_a:
+                        self.player.move(LEFT, self.level)
+                    elif ev.key == K_d:
+                        self.player.move(RIGHT, self.level)
 
             # update game values
             self.update()

@@ -29,22 +29,48 @@ class Player:
             # we append an element to the sprites' list (here an image loaded before)
             self.sprites.append(img)
 
-    def move(self, direction):
+    def move(self, direction, level):
         # copy its position in two new variables x and y
         x = self.pos[0]
         y = self.pos[1]
         # we change the orientation of the character for the new one
         self.orientation = direction
-
+        
+        # we create temporary position to do the tests
+        new_pos_x = x
+        new_pos_y = y
+        
         if direction == UP:
-            pass
+            # we go up, we take off the speed to move up the player on the screen
+            new_pos_y -= self.speed
+            # we check the collision. True if colliding, otherwise False
+            #                         we take the bloc in x divid by the size of a bloc, same in y
+            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            # if the bloc is NOT colliding
+            # we apply the new pos
+            if not collision:
+                x = new_pos_x
+                y = new_pos_y
         elif direction == DOWN:
-            pass
+            new_pos_y += self.speed
+            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            if not collision:
+                y = new_pos_y
+                x = new_pos_x
         elif direction == RIGHT:
-            pass
+            new_pos_x += self.speed
+            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            if not collision:
+                y = new_pos_y
+                x = new_pos_x
         elif direction == LEFT:
-            pass
+            new_pos_x -= self.speed
+            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            if not collision:
+                y = new_pos_y
+                x = new_pos_x
 
+        # we affect the new pos to the player position on the screen
         self.pos = [x, y]
 
     def render(self, win):

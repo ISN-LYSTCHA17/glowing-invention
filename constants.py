@@ -2,6 +2,9 @@
 WIDTH = 600
 HEIGHT = 600
 
+# size of a bloc on the screen
+TILESIZE = 16 # px
+
 # movement constants
 UP = 0
 DOWN = 1
