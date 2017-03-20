@@ -40,12 +40,18 @@ class Player:
         new_pos_x = x
         new_pos_y = y
         
+        def check_colliding(x, y):
+            return level.collide(x // TILESIZE    , y // TILESIZE    ) or \
+                   level.collide(x // TILESIZE + 1, y // TILESIZE    ) or \
+                   level.collide(x // TILESIZE    , y // TILESIZE + 1) or \
+                   level.collide(x // TILESIZE + 1, y // TILESIZE + 1)
+        
         if direction == UP:
             # we go up, we take off the speed to move up the player on the screen
             new_pos_y -= self.speed
             # we check the collision. True if colliding, otherwise False
-            #                         we take the bloc in x divid by the size of a bloc, same in y
-            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            #                        | we take the bloc in x divid by the size of a bloc, same in y
+            collision = check_colliding(new_pos_x, new_pos_y)
             # if the bloc is NOT colliding
             # we apply the new pos
             if not collision:
@@ -53,19 +59,19 @@ class Player:
                 y = new_pos_y
         elif direction == DOWN:
             new_pos_y += self.speed
-            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            collision = check_colliding(new_pos_x, new_pos_y)
             if not collision:
                 y = new_pos_y
                 x = new_pos_x
         elif direction == RIGHT:
             new_pos_x += self.speed
-            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            collision = check_colliding(new_pos_x, new_pos_y)
             if not collision:
                 y = new_pos_y
                 x = new_pos_x
         elif direction == LEFT:
             new_pos_x -= self.speed
-            collision = level.collide(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            collision = check_colliding(new_pos_x, new_pos_y)
             if not collision:
                 y = new_pos_y
                 x = new_pos_x

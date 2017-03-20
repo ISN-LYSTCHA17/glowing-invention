@@ -51,7 +51,12 @@ class Level:
     
     def collide(self, x, y):
         # we get the bloc in (x, y) required by the player
-        bloc = self.data[y][x]
+        try:
+            bloc = self.data[y][x]
+        except IndexError:
+            # we catch an IndexError, meaning that the previous statement throw an error
+            # here it is because the y or the x are outside the level
+            return True
         # we check if the bloc is in the list of the solid blocs
         # if it is, we return True otherwise False :)
         if bloc in self.solid_blocs:

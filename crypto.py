@@ -13,7 +13,7 @@ def crypt(crypting_type, code, keys):
     elif crypting_type == "vigenere":
         return vigenere_crypt(code, keys[0])
     elif crypting_type == "polybe":
-        return polybe_crypt(code, keys[0])
+        return polybe_crypt(code)
     else:
         print("I do not know this crypting method")
         return code
@@ -29,7 +29,7 @@ def decrypt(crypting, code, keys):
     elif crypting == "vigenere":
         return vigenere_decrypt(code, keys[0])
     elif crypting == "polybe":
-        return polybe_decrypt(code, keys[0])
+        return polybe_decrypt(code)
     else:
         print("I do not know this decrypting method")
         return code
@@ -121,7 +121,21 @@ def vigenere_decrypt(code, key):
 
 
 def polybe_crypt(code):
-    pass
+    square = []
+    line_size = 6
+    for i in range(line_size):
+        # we have 6 lines
+        # we add an array representing a line
+        square.append([])
+    alphabet = list("abcdefghijklmnopqrstuvwxyz ")
+    index = 0
+    # for each letter in the alphabet we place them in the array
+    for c in alphabet:
+        # if the size of the line is >= to 6
+        if len(square[index]) > line_size - 1:
+            index += 1
+        square[index].append(c)
+    print(square)
 
 
 def polybe_decrypt(code):
@@ -135,6 +149,7 @@ if __name__ == '__main__':
     
     print("Caesar", caesar_crypt(msg, "e"), sep="\n")
     print("Vigenere", vigenere_crypt(msg, "vigenere"), sep="\n")
+    polybe_crypt(msg)
 
 
 

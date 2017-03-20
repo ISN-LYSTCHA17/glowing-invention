@@ -16,9 +16,9 @@ class Menu:
         self.font = pygame.font.SysFont("arial", 18)
         
         # our buttons
-        self.btn_game = Button(10, 10, 20, 15, "Jouer", self.font)
-        self.btn_customize = Button(10, 40, 20, 15, "Personnaliser", self.font)
-        self.btn_quit = Button(10, 70, 20, 15, "Quitter", self.font)
+        self.btn_game = Button(10, 10, 90, 30, "Jouer", (20, 150, 20), self.font, (0, 0, 0))
+        self.btn_customize = Button(10, 50, 90, 30, "Personnaliser", (20, 20, 150), self.font, (255, 255, 255))
+        self.btn_quit = Button(10, 110, 90, 30, "Quitter", (150, 20, 20), self.font, (0, 0, 0))
 
     def load(self):
         self.running = True
