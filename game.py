@@ -10,6 +10,8 @@ from button import Button
 from player import Player
 # level
 from level import Level
+# random message choosing + random crypting method
+import quests
 
 
 class Game:
@@ -18,8 +20,7 @@ class Game:
         self.win = win
         self.player = Player()
         self.level = Level()
-        
-        ## self.btn = Button(10, 10, 20, 15, "hello world", pygame.font.SysFont("arial", 18))
+        self.message = quests.Message()
 
     def load(self):
         self.running = True
@@ -30,6 +31,8 @@ class Game:
         self.player.load()
         # load the level
         self.level.load()
+        # start the crypting
+        self.message.start()
 
     def update(self):
         # game updating method
@@ -43,7 +46,7 @@ class Game:
         self.level.render(self.win)
         # then player otherwise the player will be behind the map
         self.player.render(self.win)
-        
+
         ##self.btn.render(self.win)
 
     def run(self):
