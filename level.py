@@ -5,6 +5,8 @@ from constants import *
 # lib to list all the files in a specified directory
 # using a specified pattern
 import glob
+# quests
+import quests
 
 
 class Level:
@@ -14,27 +16,21 @@ class Level:
         self.tiles = []
         # default values, not loaded ones
         self.solid_blocs = [0, 1, 2]
-    
+        # indices
+        self.indices = []
+
     def load_level(self, path):
         # load a level with the path given
-        
+
         # we open the level at "path" in reading mode ("r")
         # and we put its data in a var named file
         with open(path, "r") as file:
             # we read all the lines of the file
             # which each one will be put in a list
-            lines = file.readlines()
-            # for each line in the read lines
-            for a_line in lines:
-                yn = []
-                # for each character in the line
-                for c in a_line:
-                    # we check if the read character is a number
-                    if c.isdigit():
-                        yn.append(int(c))
-                # we append the converted line to the level
-                self.data.append(yn)
-    
+            temp = file.read()
+            self.data = eval(file.read())["level"]
+            self.indices = eval(file.read())["indices"]
+
     def load(self):
         # load the level
         self.load_level("levels/level1")
@@ -48,7 +44,7 @@ class Level:
             img.convert_alpha()
             # we append an element to the sprites' list (here an image loaded before)
             self.tiles.append(img)
-    
+
     def collide(self, x, y):
         # we get the bloc in (x, y) required by the player
         try:
@@ -63,7 +59,7 @@ class Level:
             return True
         else:
             return False
-    
+
     def render(self, win):
         # rendering tiles
         y = 0

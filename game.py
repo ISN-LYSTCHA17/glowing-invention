@@ -47,8 +47,6 @@ class Game:
         # then player otherwise the player will be behind the map
         self.player.render(self.win)
 
-        ##self.btn.render(self.win)
-
     def run(self):
         # main game loop
         while self.running:
@@ -60,7 +58,6 @@ class Game:
                 # handle clic
                 elif ev.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.pos()
-                    print(self.btn(x, y))
                 # handling events : checking if we need to move the player
                 #  WASD = ZQSD for pygame
                 elif ev.type == KEYDOWN:

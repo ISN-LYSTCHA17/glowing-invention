@@ -6,32 +6,40 @@ def crypt(crypting_type, code, keys):
     # crypting_type is a string representing the kind of crypting method
     # code is also a string
     # keys is a list
-    if crypting_type == "affine":
-        return affine_crypt(code, keys[0], keys[1])
-    elif crypting_type == "caesar":
-        return caesar_crypt(code, keys[0])
-    elif crypting_type == "vigenere":
-        return vigenere_crypt(code, keys[0])
-    elif crypting_type == "polybe":
-        return polybe_crypt(code, keys[0])
-    else:
-        print("I do not know this crypting method")
+    try:
+        if crypting_type == "affine":
+            return affine_crypt(code, keys[0], keys[1])
+        elif crypting_type == "caesar":
+            return caesar_crypt(code, keys[0])
+        elif crypting_type == "vigenere":
+            return vigenere_crypt(code, keys[0])
+        elif crypting_type == "polybe":
+            return polybe_crypt(code, keys[0])
+        else:
+            print("I do not know this crypting method")
+            return code
+    except Exception:
+        print("Got an error when crypting, probably wrong keys")
         return code
 
 def decrypt(crypting, code, keys):
     # crypting is a string representing the kind of scripting
     # code is the crypted message (string)
     # keys is a list
-    if crypting == "affine":
-        return affine_decrypt(code, keys[0], keys[1])
-    elif crypting == "caesar":
-        return caesar_decrypt(code, keys[0])
-    elif crypting == "vigenere":
-        return vigenere_decrypt(code, keys[0])
-    elif crypting == "polybe":
-        return polybe_decrypt(code, keys[0])
-    else:
-        print("I do not know this decrypting method")
+    try:
+        if crypting == "affine":
+            return affine_decrypt(code, keys[0], keys[1])
+        elif crypting == "caesar":
+            return caesar_decrypt(code, keys[0])
+        elif crypting == "vigenere":
+            return vigenere_decrypt(code, keys[0])
+        elif crypting == "polybe":
+            return polybe_decrypt(code, keys[0])
+        else:
+            print("I do not know this decrypting method")
+            return code
+    except Exception:
+        print("Got an error when decrypting, probably wrong keys")
         return code
 
 

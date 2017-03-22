@@ -37,3 +37,8 @@ class Message:
                 return DECRYPT_OK
             return DECRYPT_FAILED
         return DECRYPT_NOT_ENOUGH_INDICES
+
+
+class Indice:
+    def __init__(self, content):
+        self.content = content
