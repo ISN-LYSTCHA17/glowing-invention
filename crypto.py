@@ -18,7 +18,9 @@ def crypt(crypting_type, code, keys):
         else:
             print("I do not know this crypting method")
             return code
-    except Exception:
+    except Exception as e:
+        print(e)
+        print(crypting_type)
         print("Got an error when crypting, probably wrong keys")
         return code
 

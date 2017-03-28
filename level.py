@@ -28,8 +28,8 @@ class Level:
             # we read all the lines of the file
             # which each one will be put in a list
             temp = file.read()
-            self.data = eval(file.read())["level"]
-            self.indices = eval(file.read())["indices"]
+            self.data = eval(temp)["level"]
+            self.indices = eval(temp)["indices"]
 
     def load(self):
         # load the level
