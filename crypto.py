@@ -19,9 +19,8 @@ def crypt(crypting_type, code, keys):
             print("I do not know this crypting method")
             return code
     except Exception as e:
-        print(e)
-        print(crypting_type)
         print("Got an error when crypting, probably wrong keys")
+        print(e)
         return code
 
 def decrypt(crypting, code, keys):
@@ -67,12 +66,20 @@ def affine_crypt(code, key, key2):
 
 
 def affine_decrypt(code, key, key2):
-    get_old_index = lambda x: (x - key2) // key
-
+    decrypted = []
     alphabet = list("abcdefghijklmnopqrstuvwxyz ")
+    k = 0
+    p_second = lambda _k: -(_k * key2) % len(alphabet)
+
+    while (k * key) % len(alphabet) != 1:
+        k += 1
+
+    print(k)
 
     for c in code:
-        print(alphabet[get_old_index(alphabet.index(c))])
+        decrypted.append(alphabet[(k * alphabet.index(c) + p_second(k)) % len(alphabet)])
+
+    return " ".join(decrypted)
 
 
 def caesar_crypt(code, key):
@@ -274,7 +281,6 @@ if __name__ == '__main__':
     dac = affine_decrypt(ac, 2, 4)
 
     print("\nDecrypting")
-    print("Crypting")
     print("Caesar", dcc, sep="\n")
     print("Vigenere", dvc, sep="\n")
     print("Polybe", dpc, sep="\n")

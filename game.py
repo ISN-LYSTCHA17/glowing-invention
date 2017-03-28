@@ -12,6 +12,8 @@ from player import Player
 from level import Level
 # random message choosing + random crypting method
 import quests
+# time
+import time
 
 
 class Game:
@@ -20,7 +22,7 @@ class Game:
         self.win = win
         self.player = Player()
         self.level = Level()
-        self.message = quests.Message()
+        self.beginning = time.time()
 
     def load(self):
         self.running = True
@@ -31,8 +33,6 @@ class Game:
         self.player.load()
         # load the level
         self.level.load()
-        # start the crypting
-        self.message.start()
 
     def update(self):
         # game updating method
@@ -46,6 +46,9 @@ class Game:
         self.level.render(self.win)
         # then player otherwise the player will be behind the map
         self.player.render(self.win)
+
+    def stop_dialogs(self):
+        self.player.stop_dialogs()
 
     def run(self):
         # main game loop
@@ -69,6 +72,8 @@ class Game:
                         self.player.move(LEFT, self.level)
                     elif ev.key == K_d:
                         self.player.move(RIGHT, self.level)
+                    elif ev.key == K_SPACE:
+                        self.stop_dialogs()
 
             # update game values
             self.update()

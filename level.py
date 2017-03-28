@@ -18,6 +18,8 @@ class Level:
         self.solid_blocs = [0, 1, 2]
         # indices
         self.indices = []
+        # end point
+        self.endpoint = []
 
     def load_level(self, path):
         # load a level with the path given
@@ -30,6 +32,7 @@ class Level:
             temp = file.read()
             self.data = eval(temp)["level"]
             self.indices = eval(temp)["indices"]
+            self.endpoint = eval(temp)["endpoint"]
 
     def load(self):
         # load the level
@@ -52,13 +55,23 @@ class Level:
         except IndexError:
             # we catch an IndexError, meaning that the previous statement throw an error
             # here it is because the y or the x are outside the level
-            return True
+            return COLLIDING
+        # checking if we are on the end point
+        if [x, y] == self.endpoint:
+            return GOTENDPOINT
+        # checking if we got some indice
+        if [x, y] in self.indices:
+            return GOTINDICE
         # we check if the bloc is in the list of the solid blocs
         # if it is, we return True otherwise False :)
         if bloc in self.solid_blocs:
-            return True
+            return COLLIDING
         else:
-            return False
+            return NOTCOLLIDING
+
+    def remove_indice(self, x, y):
+        if [x, y] in self.indices:
+            self.indices.pop(self.indices.index([x, y]))
 
     def render(self, win):
         # rendering tiles

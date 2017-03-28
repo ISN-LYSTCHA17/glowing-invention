@@ -1,6 +1,6 @@
 # size of the window
-WIDTH = 600
-HEIGHT = 600
+WIDTH = 640
+HEIGHT = 640
 
 # size of a bloc on the screen
 TILESIZE = 16 # px
@@ -21,3 +21,9 @@ MENU_UNDEFINED = -1
 DECRYPT_OK = 0
 DECRYPT_FAILED = 1
 DECRYPT_NOT_ENOUGH_INDICES = 2
+
+# level colliding constants
+COLLIDING = 0
+NOTCOLLIDING = 1
+GOTINDICE = 2
+GOTENDPOINT = 3
