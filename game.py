@@ -23,6 +23,7 @@ class Game:
         self.player = Player()
         self.level = Level()
         self.beginning = time.time()
+        self.font = pygame.font.SysFont("arial", 18)
 
     def load(self):
         self.running = True
@@ -46,6 +47,13 @@ class Game:
         self.level.render(self.win)
         # then player otherwise the player will be behind the map
         self.player.render(self.win)
+        # then display a list of the indices
+        pygame.draw.rect(self.win, (128, 128, 255), (WIDTH - 140, 0, 140, 140))
+        i = 0
+        for k, v in self.player.indices.items():
+            if k != "end":
+                self.win.blit(self.font.render(str(k) + " -> " + str(v), True, (0, 0, 0)), (WIDTH - 130, 10 + 30 * i))
+                i += 1
 
     def stop_dialogs(self):
         self.player.stop_dialogs()
@@ -65,13 +73,13 @@ class Game:
                 #  WASD = ZQSD for pygame
                 elif ev.type == KEYDOWN:
                     if ev.key == K_w:
-                        self.player.move(UP, self.level)
+                        self.player.move(UP, self.level, self.win)
                     elif ev.key == K_s:
-                        self.player.move(DOWN, self.level)
+                        self.player.move(DOWN, self.level, self.win)
                     elif ev.key == K_a:
-                        self.player.move(LEFT, self.level)
+                        self.player.move(LEFT, self.level, self.win)
                     elif ev.key == K_d:
-                        self.player.move(RIGHT, self.level)
+                        self.player.move(RIGHT, self.level, self.win)
                     elif ev.key == K_SPACE:
                         self.stop_dialogs()
 

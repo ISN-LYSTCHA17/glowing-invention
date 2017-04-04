@@ -7,6 +7,8 @@ from constants import *
 import glob
 # quests
 import quests
+# lights effects
+import light
 
 
 class Level:
@@ -20,6 +22,8 @@ class Level:
         self.indices = []
         # end point
         self.endpoint = []
+        # graphics effects
+        self.lights = []
 
     def load_level(self, path):
         # load a level with the path given
@@ -33,6 +37,10 @@ class Level:
             self.data = eval(temp)["level"]
             self.indices = eval(temp)["indices"]
             self.endpoint = eval(temp)["endpoint"]
+            tlights = eval(temp)["lights"]
+            for e in tlights:
+                self.lights.append(light.PreRenderedLight(*e))
+                self.lights[-1].load()
 
     def load(self):
         # load the level
@@ -74,6 +82,7 @@ class Level:
             self.indices.pop(self.indices.index([x, y]))
 
     def render(self, win):
+        pygame.draw.rect(win, (120, 205, 245), (0, 0) + win.get_size())
         # rendering tiles
         y = 0
         for line in self.data:
@@ -84,6 +93,8 @@ class Level:
                 win.blit(self.tiles[bloc_id], [x * TILESIZE, y * TILESIZE])
                 x += 1
             y += 1
+        for rendered_light in self.lights:
+            rendered_light.blit(win)
 
 
 # just to test if everything is correct ; kind of quick n' dirty

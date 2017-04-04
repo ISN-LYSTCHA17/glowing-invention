@@ -9,6 +9,24 @@ import glob
 import quests
 # dialog box
 import dialogbox
+# textentry
+import textentry as txe
+
+def split(t, c):
+    w = []
+    i = 0
+
+    for e in t:
+        if not w or len(w[-1]) == c:
+            w.append([e])
+        else:
+            w[-1].append(e)
+
+    nw = []
+    for e in w:
+        nw.append("".join(e))
+
+    return nw
 
 
 class Player:
@@ -26,6 +44,8 @@ class Player:
         # the message
         self.message = quests.Message()
         self.dbox = dialogbox.DialogBox("")
+        self.onendpoint = False
+        self.found = False
 
     def load(self):
         # for each file listed in the list returned by the glob function
@@ -40,55 +60,77 @@ class Player:
         # start crypting
         self.message.start()
 
-    def move(self, direction, level):
-        # copy its position in two new variables x and y
-        x = self.pos[0]
-        y = self.pos[1]
-        # we change the orientation of the character for the new one
-        self.orientation = direction
+        n = split(self.message.crypted, 128)
+        n.insert(0, "Le message crypté est :")
+        self.dbox.set_text(n)
+        self.dbox.trigger()
 
-        # we create temporary position to do the tests
-        new_pos_x = x
-        new_pos_y = y
+    def move(self, direction, level, win):
+        # only allow the player to move if we don't have all the indices
+        # and if we are not on the point to decrypt the message
+        if not self.onendpoint or len(self.indices) != 3:
+            # copy its position in two new variables x and y
+            x = self.pos[0]
+            y = self.pos[1]
+            # we change the orientation of the character for the new one
+            self.orientation = direction
 
-        def check_colliding(x, y):
-            return level.collide(x // TILESIZE    , y // TILESIZE    ) or \
-                   level.collide(x // TILESIZE + 1, y // TILESIZE    ) or \
-                   level.collide(x // TILESIZE    , y // TILESIZE + 1) or \
-                   level.collide(x // TILESIZE + 1, y // TILESIZE + 1)
+            # we create temporary position to do the tests
+            new_pos_x = x
+            new_pos_y = y
 
-        if direction == UP:
-            # we go up, we take off the speed to move up the player on the screen
-            new_pos_y -= self.speed
-        elif direction == DOWN:
-            new_pos_y += self.speed
-        elif direction == RIGHT:
-            new_pos_x += self.speed
-        elif direction == LEFT:
-            new_pos_x -= self.speed
+            def check_colliding(x, y):
+                return level.collide(x // TILESIZE    , y // TILESIZE    ) or \
+                       level.collide(x // TILESIZE + 1, y // TILESIZE    ) or \
+                       level.collide(x // TILESIZE    , y // TILESIZE + 1) or \
+                       level.collide(x // TILESIZE + 1, y // TILESIZE + 1)
 
-        # we check the collision. | True if colliding, otherwise False
-        #                         | we take the bloc in x divid by the size of a bloc, same in y
-        collision = check_colliding(new_pos_x, new_pos_y)
-        # if the bloc is NOT colliding
-        # we apply the new pos
-        if collision != COLLIDING:
-            x = new_pos_x
-            y = new_pos_y
-        if collision == GOTINDICE:
-            # take an indice
-            indice = self.message.get_indice()
-            self.indices.update(indice)
-            self.dbox.set_text(["Vous avez trouvé un indice :", "{} -> {}".format(*list(*indice.items()))])
-            self.dbox.trigger()
-            # we remove the indice to avoid taking it multiple times
-            level.remove_indice(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
-        if collision == GOTENDPOINT:
-            # the player must try to guess the real message
-            pass
+            if direction == UP:
+                # we go up, we take off the speed to move up the player on the screen
+                new_pos_y -= self.speed
+            elif direction == DOWN:
+                new_pos_y += self.speed
+            elif direction == RIGHT:
+                new_pos_x += self.speed
+            elif direction == LEFT:
+                new_pos_x -= self.speed
 
-        # we affect the new pos to the player position on the screen
-        self.pos = [x, y]
+            # we check the collision. | True if colliding, otherwise False
+            #                         | we take the bloc in x divid by the size of a bloc, same in y
+            collision = check_colliding(new_pos_x, new_pos_y)
+            # if the bloc is NOT colliding
+            # we apply the new pos
+            if collision != COLLIDING:
+                x = new_pos_x
+                y = new_pos_y
+            if collision == GOTINDICE:
+                # take an indice
+                indice = self.message.get_indice()
+                self.indices.update(indice)
+                self.dbox.set_text(["Vous avez trouvé un indice :", "{} -> {}".format(*list(*indice.items()))])
+                if not self.dbox.rendering:
+                    self.dbox.trigger()
+                # we remove the indice to avoid taking it multiple times
+                level.remove_indice(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
+            if collision == GOTENDPOINT:
+                # the player must try to guess the real message
+                if len(self.indices) == 3:
+                    self.onendpoint = True
+
+            # we affect the new pos to the player position on the screen
+            self.pos = [x, y]
+        else:
+            # let's trigger a new dialog box to ask the player to guess the message
+            nte = txe.TextBox(win, max_length=len(self.message.crypted) + 2, y=64, x=32, sx=WIDTH - 64, placeholder="Devine le message")
+            text = nte.get_text()
+            self.found = self.message.decrypt(self.indices) == DECRYPT_OK
+            m = "Vous avez trouvé le message" if self.found else "Le message n'est pas correct"
+            if self.found:
+                self.dbox.set_text([m, "{}".format(self.message.get_clear())])
+            else:
+                self.dbox.set_text(m)
+            if not self.dbox.rendering:
+                self.dbox.trigger()
 
     def stop_dialogs(self):
         if self.dbox.rendering:
