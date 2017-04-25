@@ -14,7 +14,12 @@ from level import Level
 import quests
 # time
 import time
+import sys
 
+txt_vigenere = "aaa"
+txt_polybe = "bbb"
+txt_caesar = "ccc"
+txt_affine = "ddd"
 
 class Game:
     def __init__(self, win):
@@ -34,6 +39,31 @@ class Game:
         self.player.load()
         # load the level
         self.level.load()
+
+        # small loop to display the type of crypting
+        btns = [
+            Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_affine,   (128, 128, 128), self.font, (255, 255, 255)),
+            Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_caesar,   (128, 128, 128), self.font, (255, 255, 255)),
+            Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_polybe,   (128, 128, 128), self.font, (255, 255, 255)),
+            Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_vigenere, (128, 128, 128), self.font, (255, 255, 255))
+        ]
+        while True:
+            ev = pygame.event.poll()
+            if ev.type == MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                # if we displayed all the help messages, we stop and it will start the game
+                if not btns:
+                    break
+                else:
+                    # if we clicked on the displayed button we stop displaying it
+                    if btns[0].collide(x, y):
+                        btns.pop(0)
+            # if we displayed all the help messages, we stop and it will start the game
+            if not btns:
+                break
+            else:
+                btns[0].render(self.win)
+            pygame.display.flip()
 
     def update(self):
         # game updating method
@@ -68,7 +98,7 @@ class Game:
                     self.running = False
                 # handle clic
                 elif ev.type == MOUSEBUTTONDOWN:
-                    x, y = pygame.mouse.pos()
+                    x, y = pygame.mouse.get_pos()
                 # handling events : checking if we need to move the player
                 #  WASD = ZQSD for pygame
                 elif ev.type == KEYDOWN:
@@ -83,6 +113,10 @@ class Game:
                     elif ev.key == K_SPACE:
                         self.stop_dialogs()
 
+            # if the player has found the secret message we quit the game
+            if self.player.found and not self.player.dbox.rendering:
+                break
+
             # update game values
             self.update()
 
@@ -91,3 +125,19 @@ class Game:
 
             # flip the screen to display the modifications
             pygame.display.flip()
+
+        # end
+        if self.player.found:
+            btn_quit = Button(0, 0, 100, 20, "Quitter le jeu", (150, 20, 20), self.font, (255, 255, 255))
+            btn_continue = Button(100, 200, 100, 20, "Continuer", (20, 150, 20), self.font, (255,255,255))
+            while True:
+                ev = pygame.event.poll()
+                if ev.type == MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    if btn_quit.collide(x, y):
+                        sys.exit(0)
+                    if btn_continue.collide(x,y)  :
+                        break
+                btn_quit.render(self.win)
+                btn_continue.render(self.win)
+                pygame.display.flip()

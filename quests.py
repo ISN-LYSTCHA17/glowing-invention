@@ -4,14 +4,11 @@ from constants import *
 
 
 messages = [
-    "ceci est un test de cryptage vas tu le passer",
-    "voici un message crypte a lire si tu y arrives",
-    "bonjour a tous je suis un message crypte",
-    "un petit message a transporter d ici a la bas",
-    "bienvenue a tous chez moi c etait un message",
-    "mon ordinateur n est pas assez puissant",
-    "les avions font vroom vroom et moi je roule",
-    "vient prendre un cafe avec nous ou bien un vere"
+    "ceci est un message",
+    "voici un code",
+    "bien le boujour",
+    "vive le cryptage",
+    "j ai une voiture"
 ]
 
 words = [
@@ -26,12 +23,25 @@ words = [
 ]
 
 
-def ri():
-    return random.randint(0, 26)
+def pgcd(a, b):
+    if a % b == 0:
+        return b
+    else:
+        return pgcd(b, a % b)
+
+
+def ri(a):
+    c = list(range(1, 27))
+    random.shuffle(c)
+    b = c.pop(0)
+    while pgcd(a, b) != 1:
+        b = c.pop(0)
+    return b
 
 
 crypting_method = {
-    "affine": [[1, ri()], [3, ri()], [5, ri()], [7, ri()], [9, ri()], [11, ri()], [15, ri()], [17, ri()], [19, ri()], [21, ri()], [23, ri()]],
+    "affine": [[1, ri(1)],   [3, ri(3)],   [5, ri(5)],   [7, ri(7)],   [9, ri(9)], [11, ri(11)],
+               [15, ri(15)], [17, ri(17)], [19, ri(19)], [21, ri(21)], [23, ri(23)]],
     "caesar": [chr(i) for i in range(97, 123)],
     "vigenere": words,
     "polybe": [i for i in range(6, 18)]

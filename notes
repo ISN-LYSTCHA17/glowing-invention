@@ -1,3 +1,9 @@
 les pnj donnent des indices sur où trouver les cases d'indices
-expliquer les types de cryptage en debut de jeu
 quitter le jeu / revenir au menu si on trouvé le message
+interface de personnalisation
+    => choisir un personnage parmi les pnjs dispo
+    => choisir un nom
+map
+    "pnjs": [
+        ["nom", "text", x, y]
+    ]

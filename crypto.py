@@ -74,12 +74,10 @@ def affine_decrypt(code, key, key2):
     while (k * key) % len(alphabet) != 1:
         k += 1
 
-    print(k)
-
     for c in code:
         decrypted.append(alphabet[(k * alphabet.index(c) + p_second(k)) % len(alphabet)])
 
-    return " ".join(decrypted)
+    return "".join(decrypted)
 
 
 def caesar_crypt(code, key):
