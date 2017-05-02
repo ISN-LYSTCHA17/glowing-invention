@@ -87,6 +87,8 @@ class Game:
 
     def stop_dialogs(self):
         self.player.stop_dialogs()
+        if self.level.speaking_npc and self.level.speaking_npc.dbox.rendering:
+            self.level.speaking_npc.dbox.trigger()
 
     def run(self):
         # main game loop
@@ -99,6 +101,7 @@ class Game:
                 # handle clic
                 elif ev.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
+                    self.level.click_for_npc(x, y, self.player.pos[0], self.player.pos[1])
                 # handling events : checking if we need to move the player
                 #  WASD = ZQSD for pygame
                 elif ev.type == KEYDOWN:

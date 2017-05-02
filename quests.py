@@ -42,9 +42,9 @@ def ri(a):
 crypting_method = {
     "affine": [[1, ri(1)],   [3, ri(3)],   [5, ri(5)],   [7, ri(7)],   [9, ri(9)], [11, ri(11)],
                [15, ri(15)], [17, ri(17)], [19, ri(19)], [21, ri(21)], [23, ri(23)]],
-    "caesar": [chr(i) for i in range(97, 123)],
+    "caesar": [chr(i) for i in range(98, 123)],
     "vigenere": words,
-    "polybe": [i for i in range(6, 18)]
+    "polybe": [i for i in range(6, 14)]
 }
 
 

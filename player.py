@@ -43,7 +43,7 @@ class Player:
         self.indices = {}
         # the message
         self.message = quests.Message()
-        self.dbox = dialogbox.DialogBox("")
+        self.dbox = dialogbox.DialogBox("", _type="_me")
         self.onendpoint = False
         self.found = False
 

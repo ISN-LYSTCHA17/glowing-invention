@@ -4,7 +4,7 @@ from constants import *
 
 class DialogBox:
     def __init__(self, text, _type="_me"):
-        self.text = ""
+        self.text = text
         self.font = pygame.font.SysFont("arial", 18)
         self.rendered_text = None
         self.set_text(self.text)

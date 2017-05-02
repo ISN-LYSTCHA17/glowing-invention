@@ -9,6 +9,8 @@ import glob
 import quests
 # lights effects
 import light
+# import NPC
+import npc
 
 
 class Level:
@@ -24,6 +26,9 @@ class Level:
         self.endpoint = []
         # graphics effects
         self.lights = []
+        # npc storage
+        self.npcs = []
+        self.speaking_npc = None
 
     def load_level(self, path):
         # load a level with the path given
@@ -37,6 +42,10 @@ class Level:
             self.data = eval(temp)["level"]
             self.indices = eval(temp)["indices"]
             self.endpoint = eval(temp)["endpoint"]
+            tnpcs = eval(temp)["npcs"]
+            for p in tnpcs:
+                n = npc.NPC(*p)
+                self.npcs.append(n)
             tlights = eval(temp)["lights"]
             for e in tlights:
                 self.lights.append(light.PreRenderedLight(*e))
@@ -95,6 +104,15 @@ class Level:
             y += 1
         for rendered_light in self.lights:
             rendered_light.blit(win)
+        for npc in self.npcs:
+            npc.render(win)
+
+    def click_for_npc(self, x, y, xp, yp):
+        for npc in self.npcs:
+            if npc.collide(x, y, xp, yp):
+                self.speaking_npc = npc
+                npc.speak()
+                break
 
 
 # just to test if everything is correct ; kind of quick n' dirty

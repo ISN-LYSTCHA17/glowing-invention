@@ -1,9 +1,5 @@
 les pnj donnent des indices sur où trouver les cases d'indices
-quitter le jeu / revenir au menu si on trouvé le message
+pnjs => 64x64 (px)
 interface de personnalisation
     => choisir un personnage parmi les pnjs dispo
     => choisir un nom
-map
-    "pnjs": [
-        ["nom", "text", x, y]
-    ]

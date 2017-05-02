@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
     cc = caesar_crypt(msg, "e")
     vc = vigenere_crypt(msg, "vigenere")
-    pc = polybe_crypt(msg, 6)
+    pc = polybe_crypt(msg, 7)
     ac = affine_crypt(msg, 2, 4)
 
     print("Crypting")
@@ -275,7 +275,7 @@ if __name__ == '__main__':
 
     dcc = caesar_decrypt(cc, "e")
     dvc = vigenere_decrypt(vc, "vigenere")
-    dpc = polybe_decrypt(pc, 6)
+    dpc = polybe_decrypt(pc, 7)
     dac = affine_decrypt(ac, 2, 4)
 
     print("\nDecrypting")

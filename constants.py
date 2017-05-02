@@ -3,7 +3,10 @@ WIDTH = 640
 HEIGHT = 640
 
 # size of a bloc on the screen
-TILESIZE = 16 # px
+TILESIZE = 32 # px
+
+NPCSIZE = 64
+NPC_MAX_DIST = 2  # tiles
 
 # movement constants
 UP = 0
