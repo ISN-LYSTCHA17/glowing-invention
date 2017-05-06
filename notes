@@ -1,5 +1,3 @@
-les pnj donnent des indices sur où trouver les cases d'indices
-pnjs => 64x64 (px)
 interface de personnalisation
     => choisir un personnage parmi les pnjs dispo
     => choisir un nom
