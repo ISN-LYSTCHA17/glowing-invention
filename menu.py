@@ -14,11 +14,15 @@ class Menu:
         self.win = win
         # creating a font from system default fonts, with size 18
         self.font = pygame.font.SysFont("arial", 18)
-        
+        self.bckg = pygame.image.load("gfx/menu/background.png").convert_alpha()
+        self.x = 0
+        self.c = 0
+        self.b = True
+
         # our buttons
-        self.btn_game = Button(10, 10, 90, 30, "Jouer", (20, 150, 20), self.font, (0, 0, 0))
-        self.btn_customize = Button(10, 50, 90, 30, "Personnaliser", (20, 20, 150), self.font, (255, 255, 255))
-        self.btn_quit = Button(10, 110, 90, 30, "Quitter", (150, 20, 20), self.font, (0, 0, 0))
+        self.btn_game = Button((WIDTH - 90) // 2, (HEIGHT - 30) // 2 - 40, 90, 30, "Jouer", (20, 150, 20), self.font, (0, 0, 0))
+        self.btn_customize = Button((WIDTH - 90) // 2, (HEIGHT - 30) // 2, 90, 30, "Personnaliser", (20, 20, 150), self.font, (255, 255, 255))
+        self.btn_quit = Button((WIDTH - 90) // 2, (HEIGHT - 30) // 2 + 40, 90, 30, "Quitter", (150, 20, 20), self.font, (0, 0, 0))
 
     def load(self):
         self.running = True
@@ -28,7 +32,7 @@ class Menu:
 
     def render(self):
         # clear the screen before blitting anything to items
-        pygame.draw.rect(self.win, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
+        self.win.blit(self.bckg, (self.x, 0))
         # we render all the buttons
         self.btn_game.render(self.win)
         self.btn_customize.render(self.win)
@@ -36,6 +40,18 @@ class Menu:
 
     def run(self):
         while self.running:
+            self.c += 1
+            if not self.c % 64:
+                if self.b: self.x -= 1
+                else: self.x += 1
+
+                if self.x <= -279:
+                    self.b = False
+                    self.x += 1
+                if self.x >= 0:
+                    self.b = True
+                    self.x -= 1
+
             for ev in pygame.event.get():
                 if ev.type == QUIT:
                     self.running = False

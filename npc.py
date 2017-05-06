@@ -29,7 +29,6 @@ class NPC:
 
     def collide(self, x, y, xp, yp):
         gx, gy = self.x + NPCSIZE // 2 - xp, self.y + NPCSIZE // 2 - yp
-        print(gx, gy, math.sqrt(gx ** 2 + gy ** 2))
         if math.sqrt(gx ** 2 + gy ** 2) > NPC_MAX_DIST * TILESIZE:
             return False
         if self.x <= x <= self.x + NPCSIZE and self.y <= y <= self.y + NPCSIZE:

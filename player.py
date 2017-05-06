@@ -32,9 +32,9 @@ def split(t, c):
 class Player:
     def __init__(self):
         # position is handle in a list of 2 elements (x, y)
-        self.pos = [0, 0]
+        self.pos = [32, 32]
         # speed in pixel per move
-        self.speed = 4
+        self.speed = TILESIZE // 2
         # the direction which the character is facing
         self.orientation = DOWN
         # all the images for the character located in gfx/player

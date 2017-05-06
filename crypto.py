@@ -20,7 +20,11 @@ def crypt(crypting_type, code, keys):
             return code
     except Exception as e:
         print("Got an error when crypting, probably wrong keys")
+        print("=" * 15)
+        print(crypting_type, code, keys)
+        print("-" * 15)
         print(e)
+        print("=" * 15)
         return code
 
 def decrypt(crypting, code, keys):
@@ -41,6 +45,11 @@ def decrypt(crypting, code, keys):
             return code
     except Exception:
         print("Got an error when decrypting, probably wrong keys")
+        print("=" * 15)
+        print(crypting, code, keys)
+        print("-" * 15)
+        print(e)
+        print("=" * 15)
         return code
 
 

@@ -19,7 +19,12 @@ class Level:
         self.data = []
         self.tiles = []
         # default values, not loaded ones
-        self.solid_blocs = [0, 1, 2]
+        self.solid_blocs = [
+            157, 331, 332, 162, 334, 266, 267,
+            268, 276, 277, 278, 279, 274, 275,
+            280, 281, 282, 283, 284, 285, 158,
+            159, 181, 182, 183, 184, 185, 186
+        ]
         # indices
         self.indices = []
         # end point
@@ -54,16 +59,11 @@ class Level:
     def load(self):
         # load the level
         self.load_level("levels/level1")
-        # for each file listed in the list returned by the glob function
-        # of the glob module. the glob function is applied to the directory
-        # where the tiles are located to list all its blocs (aka tiles)
-        #   here we use sorted(..) on glob.glob(..) to re-order all the files in alphabetical order
-        for file in sorted(glob.glob("gfx/tiles/*.png")):
-            # load an image using pygame image module
-            img = pygame.image.load(file)
-            img.convert_alpha()
-            # we append an element to the sprites' list (here an image loaded before)
-            self.tiles.append(img)
+        tileset = pygame.image.load("gfx/tileset.png").convert_alpha()
+        for h in range(tileset.get_height() // (TILESIZE + 2)):
+            for w in range(tileset.get_width() // (TILESIZE + 2)):
+                # we append an element to the sprites' list (here an image loaded before)
+                self.tiles.append(tileset.subsurface((w * (TILESIZE + 2), h * (TILESIZE + 2), TILESIZE, TILESIZE)))
 
     def collide(self, x, y):
         # we get the bloc in (x, y) required by the player
