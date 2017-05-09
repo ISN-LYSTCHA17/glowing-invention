@@ -1,4 +1,4 @@
-# import drawing lib
+﻿# import drawing lib
 import pygame
 # game constants
 from constants import *
@@ -51,9 +51,9 @@ class Player:
         # for each file listed in the list returned by the glob function
         # of the glob module. the glob function is applied to the directory
         # where the character is located to list all its images (aka sprites)
-        for file in glob.glob("gfx/player/*.png"):
+        for file in ["back", "front", "left", "right"]:
             # load an image using pygame image module
-            img = pygame.image.load(file)
+            img = pygame.image.load("gfx/player/" + file + ".png")
             img.convert_alpha()
             # we append an element to the sprites' list (here an image loaded before)
             self.sprites.append(img)
@@ -106,8 +106,11 @@ class Player:
             if collision == GOTINDICE:
                 # take an indice
                 indice = self.message.get_indice()
-                self.indices.update(indice)
-                self.dbox.set_text(["Vous avez trouvé un indice :", "{} -> {}".format(*list(*indice.items()))])
+                if indice: self.indices.update(indice)
+                try:
+                    self.dbox.set_text(["Vous avez trouvé un indice :", "{} -> {}".format(*list(*indice.items()))])
+                except IndexError:
+                    pass
                 if not self.dbox.rendering:
                     self.dbox.trigger()
                 # we remove the indice to avoid taking it multiple times
@@ -123,7 +126,7 @@ class Player:
             # let's trigger a new dialog box to ask the player to guess the message
             nte = txe.TextBox(win, max_length=len(self.message.crypted) + 2, y=64, x=32, sx=WIDTH - 64, placeholder="Devine le message")
             text = nte.get_text()
-            self.found = self.message.decrypt(self.indices) == DECRYPT_OK
+            self.found = self.message.decrypt(self.indices, text) == DECRYPT_OK
             m = "Vous avez trouvé le message" if self.found else "Le message n'est pas correct"
             if self.found:
                 self.dbox.set_text([m, "{}".format(self.message.get_clear())])

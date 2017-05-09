@@ -19,10 +19,41 @@ import time
 import glob
 import sys
 
-txt_vigenere = "aaa"
-txt_polybe = "bbb"
-txt_caesar = "ccc"
-txt_affine = "ddd"
+txt_intro = [
+    "[Au téléphone] Hum... ....",
+    "Qui es-tu?",
+    "(Ton nom)? C'est ca?",
+    "Tu dois sûrement te demander pourquoi je t'appelle et qui je suis mais ce dernier",
+    "restera secret. On ne sait jamais.",
+    "Pourquoi je t'appelle? Très bonne question. En fait, je vais t'expliquer:",
+    "Un groupe mal attentionné a pris le contrôle d'un des plus grands ordinateurs du monde",
+    "et compte s'en servir pour contrôler les cryptages donc les ordinateurs et les réseaux",
+    "du monde entier afin de réduire le monde dans le chaos. Des codes cryptés malfaisants",
+    "se trouvent un peu partout et notre seule solution est de trouver un expert en",
+    "décryptage pour décoder et détruire ces codes. Et cette solution ... c'est toi. Nous",
+    "avons entendu parler de tes prouesses en codage et nous sommes persuadés que tu es",
+    "notre seul et unique espoir. Nous et le monde avons besoin de toi. Acceptes-tu de",
+    "rejoindre cette aventure?",
+    "",
+    "Bien, je vais t'expliquer ce qui t'attend. Quatre types de codage sont possibles ici:",
+    "le caesar, le vigenere, l'affine et le polybe. Chacun de ces codages te permettra de",
+    "trouver un message codé. Tu trouveras, dans les différents endroits de ton périple,",
+    "des indices ou des indications pour les trouver qui te seront données par des",
+    "personnes, te permettant de t'aider dans la résolution de ton message codé. Donc parle",
+    "aux personnes que tu croiseras sur ton chemin.",
+    "Quand tu auras trouvé plusieurs indices, tu pourras atteindre un certain endroit où tu",
+    "pourras dire et décrypter le message. Si tu te trompes, tu devras continuer à trouver",
+    "d'autres indices, revenir au point de rendez-vous et trouver le code.",
+    "As-tu tout bien compris?",
+    "",
+    "Très bien. Bon, il est temps que je te laisse dormir. Une grande aventure t'attend,",
+    "demain. Nous te souhaitons bonne chance et n'oublie pas, le destin de notre monde",
+    "repose entre tes mains..."
+]
+txt_affine = ["aaa"]
+txt_caesar = ["bbb"]
+txt_polybe = ["ccc"]
+txt_vigenere = ["ddd"]
 
 class Game:
     def __init__(self, win):
@@ -38,6 +69,15 @@ class Game:
         self.indices_show = False
 
     def load(self):
+        self.player = Player()
+        self.level = Level()
+        self.beginning = time.time()
+        self.font = pygame.font.SysFont("arial", 18)
+        self.sounds = list(glob.glob("sounds/*.ogg"))
+        self.csound = 0
+        self.sound = music.sound(self.sounds[self.csound])
+        self.indices_show = False
+
         self.running = True
         # set the key repeat after 200ms of continuing keyboard input
         # repeated each 100ms
@@ -51,6 +91,7 @@ class Game:
 
         # small loop to display the type of crypting
         btns = [
+            Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_intro, (128, 128, 128), self.font, (255, 255, 255)),
             Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_affine,   (128, 128, 128), self.font, (255, 255, 255)),
             Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_caesar,   (128, 128, 128), self.font, (255, 255, 255)),
             Button(10, 10, WIDTH - 20, HEIGHT - 20, txt_polybe,   (128, 128, 128), self.font, (255, 255, 255)),

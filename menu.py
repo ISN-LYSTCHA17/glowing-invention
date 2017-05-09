@@ -6,6 +6,13 @@ from pygame.locals import *
 from constants import *
 # we import the button class
 from button import Button
+import os
+
+
+txt_first = [
+    "Tu vas etre redirigé vers l'interface de création de personnage",
+    "étant donné que ceci est ta première partie :) !"
+]
 
 
 class Menu:
@@ -20,12 +27,16 @@ class Menu:
         self.b = True
 
         # our buttons
+        self.btn_new = Button((WIDTH - 100) // 2, (HEIGHT - 30) // 2 - 40, 100, 30, "Nouvelle partie", (20, 150, 20), self.font, (0, 0, 0))
         self.btn_game = Button((WIDTH - 90) // 2, (HEIGHT - 30) // 2 - 40, 90, 30, "Jouer", (20, 150, 20), self.font, (0, 0, 0))
         self.btn_customize = Button((WIDTH - 90) // 2, (HEIGHT - 30) // 2, 90, 30, "Personnaliser", (20, 20, 150), self.font, (255, 255, 255))
         self.btn_quit = Button((WIDTH - 90) // 2, (HEIGHT - 30) // 2 + 40, 90, 30, "Quitter", (150, 20, 20), self.font, (0, 0, 0))
 
+        self.txt_first_game = Button(10, (HEIGHT - 44) // 2, WIDTH - 20, 44, txt_first, (128, 128, 128), self.font, (255, 255, 255))
+
     def load(self):
         self.running = True
+        self.new_game = not os.path.exists("saves/game")
 
     def update(self):
         pass
@@ -34,8 +45,11 @@ class Menu:
         # clear the screen before blitting anything to items
         self.win.blit(self.bckg, (self.x, 0))
         # we render all the buttons
-        self.btn_game.render(self.win)
-        self.btn_customize.render(self.win)
+        if not self.new_game:
+            self.btn_game.render(self.win)
+            self.btn_customize.render(self.win)
+        else:
+            self.btn_new.render(self.win)
         self.btn_quit.render(self.win)
 
     def run(self):
@@ -57,11 +71,23 @@ class Menu:
                     self.running = False
                 elif ev.type == MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
-                    if self.btn_game.collide(x, y):
-                        return MENU_GAME
-                    elif self.btn_customize.collide(x, y):
-                        return MENU_PERSONNALIZE
-                    elif self.btn_quit.collide(x, y):
+                    if not self.new_game:
+                        if self.btn_game.collide(x, y):
+                            return MENU_GAME
+                        elif self.btn_customize.collide(x, y):
+                            return MENU_PERSONNALIZE
+                    else:
+                        if self.btn_new.collide(x, y):
+                            while True:
+                                ev = pygame.event.poll()
+                                if ev.type == MOUSEBUTTONDOWN:
+                                    x, y = pygame.mouse.get_pos()
+                                    if self.txt_first_game.collide(x, y):
+                                        break
+                                self.txt_first_game.render(self.win)
+                                pygame.display.flip()
+                            return MENU_PERSONNALIZE
+                    if self.btn_quit.collide(x, y):
                         return MENU_QUIT
 
             self.update()

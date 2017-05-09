@@ -81,6 +81,8 @@ class Message:
         elif self.indices_sent == 0:
             self.indices_sent = 1
             return {'key': self.crypting_keys[0]}
+        else:
+            return {}
 
     def do_we_need_two_indices(self):
         if self.crypting_meth == "affine":
@@ -88,12 +90,13 @@ class Message:
         else:
             return True
 
-    def decrypt(self, indices):
+    def decrypt(self, indices, msg):
         if "crypting" in indices.keys() and "key" in indices.keys() and ("key2" in indices.keys() or "end" in indices.keys()):
             keys = [indices["key"]]
             if "key2" in indices.keys():
                 keys.append(indices["key2"])
-            if crypto.decrypt(indices["crypting"], self.crypted, keys) == self.__msg:
+            d = crypto.decrypt(indices["crypting"], self.crypted, keys)
+            if d == self.__msg and d == msg:
                 return DECRYPT_OK
             return DECRYPT_FAILED
         return DECRYPT_NOT_ENOUGH_INDICES
