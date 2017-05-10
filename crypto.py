@@ -172,7 +172,6 @@ def vigenere_crypt(code, key):
         # we add a character to crypted :
         #    which is located in crypted_abc at its index in the abc
         crypted.append(crypted_abc[alphabet.index(c)])
-
     return "".join(crypted)
 
 

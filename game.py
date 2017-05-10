@@ -19,49 +19,13 @@ import time
 import glob
 import sys
 
-txt_intro = [
-    "[Au téléphone] Hum... ....",
-    "Qui es-tu?",
-    "(Ton nom)? C'est ca?",
-    "Tu dois sûrement te demander pourquoi je t'appelle et qui je suis mais ce dernier",
-    "restera secret. On ne sait jamais.",
-    "Pourquoi je t'appelle? Très bonne question. En fait, je vais t'expliquer:",
-    "Un groupe mal attentionné a pris le contrôle d'un des plus grands ordinateurs du monde",
-    "et compte s'en servir pour contrôler les cryptages donc les ordinateurs et les réseaux",
-    "du monde entier afin de réduire le monde dans le chaos. Des codes cryptés malfaisants",
-    "se trouvent un peu partout et notre seule solution est de trouver un expert en",
-    "décryptage pour décoder et détruire ces codes. Et cette solution ... c'est toi. Nous",
-    "avons entendu parler de tes prouesses en codage et nous sommes persuadés que tu es",
-    "notre seul et unique espoir. Nous et le monde avons besoin de toi. Acceptes-tu de",
-    "rejoindre cette aventure?",
-    "",
-    "Bien, je vais t'expliquer ce qui t'attend. Quatre types de codage sont possibles ici:",
-    "le caesar, le vigenere, l'affine et le polybe. Chacun de ces codages te permettra de",
-    "trouver un message codé. Tu trouveras, dans les différents endroits de ton périple,",
-    "des indices ou des indications pour les trouver qui te seront données par des",
-    "personnes, te permettant de t'aider dans la résolution de ton message codé. Donc parle",
-    "aux personnes que tu croiseras sur ton chemin.",
-    "Quand tu auras trouvé plusieurs indices, tu pourras atteindre un certain endroit où tu",
-    "pourras dire et décrypter le message. Si tu te trompes, tu devras continuer à trouver",
-    "d'autres indices, revenir au point de rendez-vous et trouver le code.",
-    "As-tu tout bien compris?",
-    "",
-    "Très bien. Bon, il est temps que je te laisse dormir. Une grande aventure t'attend,",
-    "demain. Nous te souhaitons bonne chance et n'oublie pas, le destin de notre monde",
-    "repose entre tes mains..."
-]
-txt_affine = ["aaa"]
-txt_caesar = ["bbb"]
-txt_polybe = ["ccc"]
-txt_vigenere = ["ddd"]
-
 class Game:
     def __init__(self, win):
         self.running = False
         self.win = win
-        self.player = Player()
-        self.level = Level()
-        self.beginning = time.time()
+        self.player = None
+        self.level = None
+        self.beginning = 0
         self.font = pygame.font.SysFont("arial", 18)
         self.sounds = list(glob.glob("sounds/*.ogg"))
         self.csound = 0
@@ -72,8 +36,6 @@ class Game:
         self.player = Player()
         self.level = Level()
         self.beginning = time.time()
-        self.font = pygame.font.SysFont("arial", 18)
-        self.sounds = list(glob.glob("sounds/*.ogg"))
         self.csound = 0
         self.sound = music.sound(self.sounds[self.csound])
         self.indices_show = False
@@ -88,6 +50,73 @@ class Game:
         self.level.load()
         # play the music
         music.play(self.sound)
+
+        nomjoueur = ""
+        with open("saves/game") as file:
+            nomjoueur = file.read()
+
+        txt_intro = [
+            "[Au téléphone] Hum... ....",
+            "Qui es-tu?",
+            nomjoueur + "? C'est ca?",
+            "Tu dois sûrement te demander pourquoi je t'appelle et qui je suis mais ce dernier",
+            "restera secret. On ne sait jamais.",
+            "Pourquoi je t'appelle? Très bonne question. En fait, je vais t'expliquer:",
+            "Un groupe mal attentionné a pris le contrôle d'un des plus grands ordinateurs du monde",
+            "et compte s'en servir pour contrôler les cryptages donc les ordinateurs et les réseaux",
+            "du monde entier afin de réduire le monde dans le chaos. Des codes cryptés malfaisants",
+            "se trouvent un peu partout et notre seule solution est de trouver un expert en",
+            "décryptage pour décoder et détruire ces codes. Et cette solution ... c'est toi. Nous",
+            "avons entendu parler de tes prouesses en codage et nous sommes persuadés que tu es",
+            "notre seul et unique espoir. Nous et le monde avons besoin de toi. Acceptes-tu de",
+            "rejoindre cette aventure?",
+            "",
+            "Bien, je vais t'expliquer ce qui t'attend. Quatre types de codage sont possibles ici:",
+            "le caesar, le vigenere, l'affine et le polybe. Chacun de ces codages te permettra de",
+            "trouver un message codé. Tu trouveras, dans les différents endroits de ton périple,",
+            "des indices ou des indications pour les trouver qui te seront données par des",
+            "personnes, te permettant de t'aider dans la résolution de ton message codé. Donc parle",
+            "aux personnes que tu croiseras sur ton chemin.",
+            "Quand tu auras trouvé plusieurs indices, tu pourras atteindre un certain endroit où tu",
+            "pourras dire et décrypter le message. Si tu te trompes, tu devras continuer à trouver",
+            "d'autres indices, revenir au point de rendez-vous et trouver le code.",
+            "As-tu tout bien compris?",
+            "",
+            "Très bien. Bon, il est temps que je te laisse dormir. Une grande aventure t'attend,",
+            "demain. Nous te souhaitons bonne chance et n'oublie pas, le destin de notre monde",
+            "repose entre tes mains...",
+            "",
+            "clique pour passer à la suite"
+        ]
+        txt_affine = [
+            "Le cryptage affine associe à un caractère de rang x dans l'alphabet, un autre caractère",
+            "de rang a*x + b, avec a et b fixés. Tu auras donc besoin de récupérer deux clés pour",
+            "décrypter ce chiffrement !",
+            "",
+            "clique pour passer à la suite"
+        ]
+        txt_caesar = [
+            "Le cryptage du chiffre de César prend une clé unique (une lettre) et tout l'alphabet en",
+            "est décalé. Par exemple, la clé est e, l'alphabet est de cryptage est donc :",
+            "efghijklmnopqrst abcd (l'espace fait parti de l'alphabet de cryptage)",
+            "",
+            "clique pour passer à la suite"
+        ]
+        txt_polybe = [
+            "Le cryptage par carré de polybe utilise un carré de coté n dans lequel est disposé",
+            "l'alphabet, dans l'ordre, ligne par ligne. Le b se situe donc en (x=1, y=0), son code",
+            "est donc 10. Ici la clé est donc un nombre indiquant la taille du carré",
+            "",
+            "clique pour passer à la suite"
+        ]
+        txt_vigenere = [
+            "Le cryptage par chiffrement de vigenere prend en entrée un mot clé, qui est épuré de",
+            "chacunes des lettres qui y sont en doublons. Par exemple la clé vigenere sera épurée",
+            "en vigenr. L'alphabet est ensuite construit en ajoutant les lettres qui ne sont pas",
+            "dans la clé épurée",
+            "",
+            "clique pour passer à la suite"
+        ]
 
         # small loop to display the type of crypting
         btns = [
@@ -178,10 +207,10 @@ class Game:
 
             # render game objets
             self.render()
-            self.win.blit(
-                self.font.render(
-                    str(pygame.mouse.get_pos()[0] // TILESIZE) + "," + str(pygame.mouse.get_pos()[1] // TILESIZE),
-                    True, (0, 0, 0)), (pygame.mouse.get_pos()[0] + 20, pygame.mouse.get_pos()[1]))
+            # self.win.blit(
+            #     self.font.render(
+            #         str(pygame.mouse.get_pos()[0] // TILESIZE) + "," + str(pygame.mouse.get_pos()[1] // TILESIZE),
+            #         True, (0, 0, 0)), (pygame.mouse.get_pos()[0] + 20, pygame.mouse.get_pos()[1]))
 
 
             # flip the screen to display the modifications
