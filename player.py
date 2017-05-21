@@ -79,11 +79,24 @@ class Player:
             new_pos_x = x
             new_pos_y = y
 
-            def check_colliding(x, y):
-                return level.collide(x // TILESIZE    , y // TILESIZE    ) or \
-                       level.collide(x // TILESIZE + 1, y // TILESIZE    ) or \
-                       level.collide(x // TILESIZE    , y // TILESIZE + 1) or \
-                       level.collide(x // TILESIZE + 1, y // TILESIZE + 1)
+            def check_colliding(_x, _y):
+                tests = [
+                    level.collide(_x // TILESIZE    , _y // TILESIZE    ),
+                    level.collide(_x // TILESIZE + 1, _y // TILESIZE    ),
+                    level.collide(_x // TILESIZE    , _y // TILESIZE + 1),
+                    level.collide(_x // TILESIZE + 1, _y // TILESIZE + 1)
+                ]
+                tests = [t for t in tests if t != NOTCOLLIDING]
+                if tests == []:
+                    # everything was NOTCOLLIDING
+                    return NOTCOLLIDING
+                if len(tests) > 1:
+                    # we have more than one special value, let's return the highest one
+                    tests = sorted(tests)
+                    return tests[-1]
+                else:
+                    # len(tests) == 1
+                    return tests[0]
 
             if direction == UP:
                 # we go up, we take off the speed to move up the player on the screen
@@ -104,18 +117,22 @@ class Player:
                 x = new_pos_x
                 y = new_pos_y
             if collision == GOTINDICE:
-                # take an indice
-                indice = self.message.get_indice()
-                if indice: self.indices.update(indice)
-                try:
-                    self.dbox.set_text(["Vous avez trouvé un indice :", "{} -> {}".format(*list(*indice.items()))])
-                except IndexError:
-                    pass
-                if not self.dbox.rendering:
-                    self.dbox.trigger()
-                # we remove the indice to avoid taking it multiple times
-                level.remove_indice(new_pos_x // TILESIZE, new_pos_y // TILESIZE)
-            if collision == GOTENDPOINT:
+                indice = None  # default value for the following tests
+                # we remove the indice to avoid taking it multiple times, and
+                # by the same time we check if there was one (just to be sure enough)
+                if level.remove_indice(new_pos_x // TILESIZE, new_pos_y // TILESIZE):
+                    # take an indice
+                    indice = self.message.get_indice()
+                if indice:
+                    self.indices.update(indice)
+                    try:
+                        self.dbox.set_text(["Vous avez trouvé un indice :", "{} -> {}".format(*list(*indice.items()))])
+                    except IndexError:
+                        pass
+                    else:
+                        if not self.dbox.rendering:
+                            self.dbox.trigger()
+            elif collision == GOTENDPOINT:
                 # the player must try to guess the real message
                 if len(self.indices) == 3:
                     self.onendpoint = True

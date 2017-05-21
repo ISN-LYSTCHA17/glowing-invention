@@ -23,7 +23,8 @@ class Level:
             157, 331, 332, 162, 334, 266, 267,
             268, 276, 277, 278, 279, 274, 275,
             280, 281, 282, 283, 284, 285, 158,
-            159, 181, 182, 183, 184, 185, 186
+            159, 181, 182, 183, 184, 185, 186,
+            333, 178, 179, 180
         ]
         # indices
         self.indices = []
@@ -77,11 +78,11 @@ class Level:
         if [x, y] == self.endpoint:
             return GOTENDPOINT
         # checking if we got some indice
-        if [x, y] in self.indices:
+        elif [x, y] in self.indices:
             return GOTINDICE
         # we check if the bloc is in the list of the solid blocs
-        # if it is, we return True otherwise False :)
-        if bloc in self.solid_blocs:
+        # if it is, we return True (COLLIDING) otherwise False (NOTCOLLIDING) :)
+        elif bloc in self.solid_blocs:
             return COLLIDING
         else:
             return NOTCOLLIDING
@@ -89,6 +90,9 @@ class Level:
     def remove_indice(self, x, y):
         if [x, y] in self.indices:
             self.indices.pop(self.indices.index([x, y]))
+            return True
+        else:
+            return False
 
     def render(self, win):
         pygame.draw.rect(win, (120, 205, 245), (0, 0) + win.get_size())
